@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>がい数マスター（4年 算数）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#20293a; --ink2:#5a6779; --paper:#f5f2ea; --card:#fffdf8; --line:#ddd6c6;
+  --ai:#2f6db5; --ai2:#1d4f8a; --shu:#cf4a3c; --yellow:#f5c93b; --green:#3f8a5f;
+  --ok:#1f7a4d; --okbg:#e7f5ec; --ng:#bc3b28; --ngbg:#fbeae6;
+  --fs:17px;
+}
+*{box-sizing:border-box}
+html{font-size:var(--fs)}
+body{
+  margin:0;color:var(--ink);line-height:1.75;-webkit-text-size-adjust:100%;
+  font-family:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans CJK JP",sans-serif;
+  background:
+    repeating-linear-gradient(0deg,rgba(47,109,181,.055) 0 1px,transparent 1px 26px),
+    repeating-linear-gradient(90deg,rgba(47,109,181,.055) 0 1px,transparent 1px 26px),
+    var(--paper);
+}
+h1,h2,h3,h4,.disp{font-family:"Zen Maru Gothic","BIZ UDPGothic","Hiragino Maru Gothic ProN",sans-serif}
+button{font-family:inherit;font-size:1rem;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--ai);outline-offset:2px}
+rt{font-size:.46em;color:var(--ink2);font-weight:400;letter-spacing:-.02em}
+body.noruby rt{display:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+
+/* hero */
+.hero{background:var(--ink);color:#fff;padding:24px 0 0;position:relative;overflow:hidden}
+.hero .kicker{display:inline-block;background:var(--yellow);color:var(--ink);font-weight:700;font-size:.78rem;padding:2px 12px;border-radius:999px;letter-spacing:.06em}
+.hero h1{font-size:2.05rem;font-weight:900;margin:10px 0 2px;line-height:1.28;letter-spacing:.02em}
+.hero h1 .hl{color:var(--yellow)}
+.hero p.lead{margin:0 0 16px;color:#cfd8e4;font-size:.94rem;max-width:44em}
+.hero .grid4{position:absolute;right:14px;top:-30px;font-family:"Zen Maru Gothic";font-weight:900;color:rgba(255,255,255,.05);font-size:8.5rem;line-height:1;pointer-events:none}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;position:relative}
+.tool{background:transparent;border:1.5px solid #64748b;color:#fff;border-radius:999px;padding:4px 13px;font-size:.82rem}
+.tool[aria-pressed="true"]{background:var(--yellow);color:var(--ink);border-color:var(--yellow);font-weight:700}
+.stripes{display:grid;grid-template-columns:repeat(4,1fr);height:9px}
+.stripes span:nth-child(1){background:var(--ai)}
+.stripes span:nth-child(2){background:var(--shu)}
+.stripes span:nth-child(3){background:var(--yellow)}
+.stripes span:nth-child(4){background:var(--green)}
+
+/* tabs */
+nav.tabs{position:sticky;top:0;z-index:30;background:var(--card);border-bottom:2px solid var(--line);box-shadow:0 2px 10px rgba(32,41,58,.07)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;padding-top:7px;scrollbar-width:thin}
+.tab{flex:0 0 auto;border:0;background:transparent;padding:8px 12px 9px;border-bottom:4px solid transparent;font-weight:700;color:var(--ink2);font-family:"Zen Maru Gothic",sans-serif;font-size:.92rem;white-space:nowrap}
+.tab .n{display:inline-block;min-width:1.55em;height:1.55em;line-height:1.55em;border-radius:50%;background:var(--paper);text-align:center;margin-right:5px;font-size:.76rem}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--yellow)}
+.tab[aria-selected="true"] .n{background:var(--yellow)}
+.score{margin-left:auto;align-self:center;font-size:.78rem;color:var(--ink2);white-space:nowrap;padding:0 4px 5px}
+.score b{color:var(--ok);font-size:.98rem}
+
+main{padding:20px 0 50px}
+section.panel{display:none}
+section.panel.on{display:block;animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.sechead{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:4px 0 12px}
+.sechead h2{margin:0;font-size:1.5rem;font-weight:900}
+.tag{display:inline-block;font-size:.74rem;font-weight:700;padding:1px 10px;border-radius:4px;background:var(--yellow);color:var(--ink)}
+.tag.sh{background:var(--shu);color:#fff}
+.tag.ai{background:var(--ai);color:#fff}
+.howto{background:var(--card);border-left:6px solid var(--yellow);border-radius:0 10px 10px 0;padding:9px 15px;margin:0 0 16px;font-size:.9rem;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.howto b{color:var(--ai2)}
+
+h3.sub{font-size:1.12rem;margin:24px 0 9px;display:flex;align-items:center;gap:9px}
+h3.sub::before{content:"";width:13px;height:13px;border-radius:3px;background:var(--yellow);border:2.5px solid var(--ink);flex:none}
+
+/* generic cards */
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.mini{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px}
+.mini h4{margin:0 0 4px;font-size:.98rem;font-weight:900}
+.mini p{margin:0;font-size:.85rem;color:var(--ink2)}
+.mini .big{font-family:"Zen Maru Gothic";font-weight:900;font-size:1.5rem;line-height:1.2}
+
+table.rule{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;font-size:.92rem}
+table.rule th,table.rule td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:middle}
+table.rule thead th{background:var(--ink);color:#fff;font-size:.84rem;font-weight:700}
+table.rule td.c{text-align:center;font-weight:700}
+table.rule tbody tr:nth-child(even){background:#fbf8f0}
+table.rule td,.mini h4{line-height:1.95}
+
+/* machine */
+.machine{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:14px 16px;box-shadow:5px 5px 0 rgba(32,41,58,.10)}
+.mrow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.mfield{display:flex;flex-direction:column;gap:3px}
+.mfield label{font-size:.76rem;font-weight:700;color:var(--ink2)}
+input[type=number],select{font-family:inherit;font-size:1.05rem;padding:6px 10px;border:2px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-weight:700}
+input[type=number]{width:11em}
+select{max-width:100%}
+.btn{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:7px 20px;font-weight:700;font-size:.9rem}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink2)}
+.btn.shu{background:var(--shu)}
+
+.ptable{display:flex;gap:3px;justify-content:center;margin:6px 0 2px;overflow-x:auto;padding-bottom:4px}
+.pcol{flex:0 0 auto;text-align:center;min-width:40px}
+.pcol .up{font-size:.58rem;color:var(--ai);height:1em;line-height:1;font-weight:700}
+.pcol .ph{font-size:.6rem;color:var(--ink2);white-space:nowrap;margin-bottom:2px}
+.pcol .dg{font-family:"Zen Maru Gothic";font-weight:900;font-size:1.45rem;border:2px solid var(--line);border-radius:6px;background:#fff;padding:1px 0;line-height:1.4}
+.pcol.keep .dg{border-color:var(--ai);color:var(--ai2)}
+.pcol.decide .dg{border-color:var(--shu);background:#fdece9;color:var(--shu);transform:scale(1.12)}
+.pcol.drop .dg{opacity:.32}
+.pcol .res{font-family:"Zen Maru Gothic";font-weight:900;font-size:1.3rem;color:var(--ink);padding:2px 0;line-height:1.4}
+.pcol.decide .res{color:var(--shu)}
+.mark{display:flex;justify-content:center;gap:3px}
+.mark .arrow{margin-top:6px;font-size:.8rem;color:var(--ink2)}
+.saybig{font-family:"Zen Maru Gothic";font-weight:900;font-size:1.22rem;text-align:center;margin:12px 0 4px;line-height:1.6}
+.saybig .n{color:var(--ai2);font-size:1.5rem}
+.saybig em{font-style:normal;background:linear-gradient(transparent 62%,#ffe58a 62%);padding:0 2px}
+.saysub{text-align:center;font-size:.82rem;color:var(--ink2);margin:0}
+
+/* number line */
+.nl{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px 4px}
+
+/* quiz */
+.qlist{display:grid;gap:12px}
+.q{background:var(--card);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px}
+.qh{display:flex;gap:9px;align-items:flex-start}
+.qn{flex:0 0 auto;font-family:"Zen Maru Gothic";font-weight:900;background:var(--ink);color:#fff;border-radius:7px;min-width:2.1em;text-align:center;padding:0 5px;line-height:1.85;font-size:.9rem}
+.qt{flex:1;font-weight:700;font-size:.99rem;line-height:1.62}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:7px;margin:9px 0 0 2.6em}
+.ch{text-align:left;background:#faf8f2;border:2px solid var(--line);border-radius:9px;padding:10px 12px 8px;line-height:1.85;font-size:.93rem}
+.ch:hover{border-color:var(--ink2)}
+.ch.ok{background:var(--okbg);border-color:var(--ok);font-weight:700}
+.ch.ng{background:var(--ngbg);border-color:var(--ng);text-decoration:line-through;text-decoration-color:var(--ng)}
+.ch[disabled]{cursor:default}
+.fb{margin:9px 0 0 2.6em;border-radius:9px;padding:8px 12px;font-size:.9rem;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.ng{background:var(--ngbg);border-left:5px solid var(--ng)}
+.fb .mk{font-weight:900;font-family:"Zen Maru Gothic";margin-right:5px}
+.retry{margin:9px 0 0 2.6em;background:transparent;border:1.5px solid var(--ink2);border-radius:999px;padding:2px 13px;font-size:.82rem;display:none}
+.retry.show{display:inline-block}
+.steps{font-size:.86rem;color:var(--ink2);margin:7px 0 0 2.6em;line-height:1.7}
+
+
+/* 位取り図・誤答フォロー */
+.pv{display:flex;gap:3px;margin:9px 0 2px;padding-bottom:3px;overflow-x:auto}
+.pvc{flex:0 0 auto;min-width:44px;text-align:center;border:1.5px solid var(--line);border-radius:6px;background:#fff;padding:2px 2px 1px}
+.pvc .pvl{display:block;font-size:.56rem;font-weight:700;color:var(--shu);height:1.1em;line-height:1.1}
+.pvc .pvp{display:block;font-size:.6rem;color:var(--ink2);line-height:1.3}
+.pvc .pvd{display:block;font-family:"Zen Maru Gothic";font-weight:900;font-size:1.35rem;line-height:1.45}
+.pvc.dec{border-color:var(--shu);background:#fdece9}
+.pvc.dec .pvd{color:var(--shu)}
+.fixbox{margin-top:8px;border-top:1px dashed #c9b7a6;padding-top:6px}
+.fixbox>b{font-size:.84rem;color:var(--ai2);font-family:"Zen Maru Gothic"}
+ol.fixsteps{margin:4px 0 0 1.3em;padding:0;font-size:.87rem;line-height:1.8}
+ol.fixsteps b{color:var(--shu);background:linear-gradient(transparent 62%,#ffe58a 62%)}
+.fixend{margin:6px 0 0;font-size:.83rem;color:var(--ink2)}
+.pcol .dg.ghost{opacity:.4;border-style:dashed}
+.pcol.keep.chg .res{color:var(--shu)}
+
+
+.pvside{flex:0 0 auto;font-size:.62rem;color:var(--ink2);align-self:center;padding-right:2px;white-space:nowrap}
+.cal{width:100%;border-collapse:collapse;font-size:.86rem;margin:9px 0 0;background:#fff}
+.cal th{background:#f2eee3;border:1px solid var(--line);padding:4px 6px;font-size:.74rem;font-weight:700}
+.cal td{border:1px solid var(--line);padding:5px 6px;text-align:center;vertical-align:middle}
+.cal td.big{font-family:"Zen Maru Gothic";font-weight:900;font-size:1.15rem}
+.cal td.up{color:var(--shu);font-weight:700}
+.cal td.stay{color:var(--ai2);font-weight:700}
+.caleq{margin:7px 0 0;text-align:center;font-family:"Zen Maru Gothic";font-weight:900;font-size:1.02rem}
+.caleq b{color:var(--shu)}
+.mch{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:9px 0 0}
+.mcol{border:2px solid var(--line);border-radius:9px;background:#fff;padding:7px 6px;text-align:center;line-height:1.5}
+.mcol b{display:block;font-family:"Zen Maru Gothic";font-size:.92rem}
+.mcol span{display:block;font-size:.72rem;color:var(--ink2)}
+.mcol em{display:block;font-style:normal;font-size:.72rem;color:var(--ai2);font-weight:700;margin-top:2px}
+.mcol.on{border-color:var(--shu);background:#fdece9;box-shadow:0 0 0 2px #f7d6cf inset}
+.mcol.on b{color:var(--shu);font-size:1.02rem}
+.mch.terms .mcol.on{border-color:var(--ai);background:#eef4fb;box-shadow:none}
+.mch.terms .mcol.on b{color:var(--ai2)}
+.nlbox{background:#fff;border:1px solid var(--line);border-radius:9px;margin:9px 0 0;padding:4px 6px 0}
+/* test-like */
+.titem{background:var(--card);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;margin-bottom:11px}
+.titem .th{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap;margin-bottom:5px}
+.titem .no{font-family:"Zen Maru Gothic";font-weight:900;background:var(--ai);color:#fff;border-radius:6px;padding:0 8px;font-size:.8rem}
+.titem .ref{font-size:.72rem;color:var(--ink2)}
+.titem .body{font-size:.96rem;line-height:1.72}
+.titem .ans{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:#eef4fb;border:1.5px solid #b8cfe8;border-radius:8px;padding:4px 10px 3px;font-weight:700;font-size:.9rem;line-height:1.9}
+.pill.s{background:#fdece9;border-color:#e8b8ae}
+details{margin-top:9px;border-top:1px dashed var(--line);padding-top:7px}
+summary{cursor:pointer;font-weight:700;font-size:.86rem;color:var(--ai2);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▶ ";font-size:.7em}
+details[open] summary::before{content:"▼ "}
+details .st{font-size:.87rem;color:var(--ink2);line-height:1.75;margin-top:6px}
+details .st b{color:var(--ink)}
+table.smallt{width:100%;border-collapse:collapse;font-size:.88rem;margin:6px 0}
+table.smallt th,table.smallt td{border:1px solid var(--line);padding:5px 9px;text-align:center}
+table.smallt th{background:#f2eee3;font-weight:700}
+
+footer.wrap{font-size:.76rem;color:var(--ink2);padding-bottom:34px;line-height:1.85}
+footer.wrap b{color:var(--ink)}
+
+@media (max-width:760px){
+  :root{--fs:16px}
+  .hero h1{font-size:1.55rem}
+  .choices,.fb,.retry,.steps{margin-left:0}
+  .pcol{min-width:34px}
+  .pcol .dg{font-size:1.2rem}
+  .pcol .res{font-size:1.1rem}
+}
+@media print{nav.tabs,.tools{display:none}section.panel{display:block !important;break-before:page}.hero{background:#fff;color:var(--ink)}details{display:block}details .st{display:block}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">4年 算数　7. がい数の表し方と使い方</span>
+    <h1>がい数<span class="hl">マスター</span></h1>
+    <p class="lead">「どの位で四捨五入するか」さえ見つけられれば、がい数はぜんぶ解けます。①きほん → ②どの位？ → ③はんい → ④見積もり → ⑤にている問題 → ⑥一問一答 の順にどうぞ。</p>
+    <div class="tools">
+      <button class="tool" id="tRuby" aria-pressed="true">ふりがな</button>
+      <button class="tool" id="tBig" aria-pressed="false">文字を大きく</button>
+      <button class="tool" id="tSay" aria-pressed="true">読み上げ</button>
+    </div>
+  </div>
+  <div class="grid4" aria-hidden="true">約</div>
+  <div class="stripes" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+</header>
+
+<nav class="tabs" aria-label="メニュー">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-p="p1"><span class="n">1</span>きほん</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="p2"><span class="n">2</span>どの位で四捨五入？</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="p3"><span class="n">3</span>はんい</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="p4"><span class="n">4</span>見積もり</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="p5"><span class="n">5</span>にている問題</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="p6"><span class="n">6</span>一問一答</button>
+    <span class="score" aria-live="polite">できた：<b id="sc">0</b> / <span id="scAll">0</span></span>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ===== 1 きほん ===== -->
+<section class="panel on" id="p1" role="tabpanel">
+  <div class="sechead"><h2>きほんの 3つ</h2><span class="tag">ここだけは はずせない</span></div>
+  <div class="howto">がい数は「むずかしい計算」ではありません。<b>①およその数だということ ②「約」のつけ方 ③四捨五入のしくみ</b>。この3つだけで、あとは同じことをくり返すだけです。</div>
+
+  <div class="cards3">
+    <div class="mini">
+      <h4>① がい数＝およその数</h4>
+      <p>正確な数ではなく、<b>およその大きさ</b>を表した数。21034人 → 約20000人。</p>
+      <p style="margin-top:6px"><span class="big">21034 → 20000</span></p>
+    </div>
+    <div class="mini">
+      <h4>② 「約」は つけたり つけなかったり</h4>
+      <p>「約何万人ですか」と聞かれたら、答えは <b>約3万人</b>。「がい数にしましょう」と聞かれたら、<b>30000</b>（約はつけない）。<b>問題の聞き方に合わせる</b>。</p>
+    </div>
+    <div class="mini">
+      <h4>③ 四捨五入＝0〜4はそのまま、5〜9はくり上げ</h4>
+      <p>見るのは <b>1つ下の位の数字</b>。それより下の位は 見ません。</p>
+    </div>
+  </div>
+
+  <h3 class="sub">どっちに 近い？（数直線で つかむ）</h3>
+  <div class="howto" style="border-left-color:var(--ai)">スライダーを うごかして、<b>20000 と 30000 の どちらに 近いか</b>を 見てみよう。まん中の <b>25000</b> を こえたら、近い方が かわります。これが 四捨五入の 正体です。</div>
+  <div class="machine">
+    <div class="mrow">
+      <div class="mfield" style="flex:1;min-width:240px">
+        <label for="nlRange">数を えらぶ</label>
+        <input type="range" id="nlRange" min="20000" max="30000" step="1" value="21034" style="width:100%;accent-color:#2f6db5">
+      </div>
+      <div class="mfield">
+        <label>いまの数</label>
+        <div style="font-family:'Zen Maru Gothic';font-weight:900;font-size:1.6rem" id="nlVal">21034</div>
+      </div>
+    </div>
+    <div class="nl" id="nlBox"></div>
+    <p class="saybig" id="nlSay"></p>
+    <p class="saysub" id="nlSub"></p>
+  </div>
+
+  <h3 class="sub">「約」の つけ方</h3>
+  <table class="rule">
+    <thead><tr><th style="width:46%">問題の いい方</th><th>答え方</th></tr></thead>
+    <tbody>
+      <tr><td>それぞれ <b>約何万人</b>と いえますか</td><td class="c">約3万人（「約」を つける）</td></tr>
+      <tr><td>四捨五入して <b>一万の位までのがい数</b>にしましょう</td><td class="c">30000（「約」は つけない）</td></tr>
+      <tr><td>四捨五入して <b>上から1けたのがい数</b>にしましょう</td><td class="c">30000（「約」は つけない）</td></tr>
+    </tbody>
+  </table>
+  <p class="saysub" style="text-align:left;margin-top:6px">※ 問題文に すでに「約」が 書いてあるときは、答えに もう 一度「約」を 書かない（「約（約3万人）」に ならないように）。</p>
+</section>
+
+<!-- ===== 2 どの位 ===== -->
+<section class="panel" id="p2" role="tabpanel">
+  <div class="sechead"><h2>どの位で 四捨五入する？</h2><span class="tag sh">ここが 9割</span></div>
+  <div class="howto">がい数の 問題は、<b>「どの位で四捨五入するか」を 見つける問題</b>です。見つけられたら、あとは 0〜4なら そのまま、5〜9なら くり上げるだけ。下の 表を 見れば ぜんぶ わかります。</div>
+
+  <table class="rule">
+    <thead><tr><th style="width:52%">問題の いい方</th><th>四捨五入する位</th><th style="width:18%">合言葉</th></tr></thead>
+    <tbody>
+      <tr><td>一万の位までのがい数</td><td class="c">千の位</td><td class="c" rowspan="4" style="background:#fff8dd">1つ下の位</td></tr>
+      <tr><td>千の位までのがい数</td><td class="c">百の位</td></tr>
+      <tr><td>百の位までのがい数</td><td class="c">十の位</td></tr>
+      <tr><td>十の位までのがい数</td><td class="c">一の位</td></tr>
+      <tr><td>上から1けたのがい数</td><td class="c">上から2けため</td><td class="c" rowspan="3" style="background:#eef4fb">上から<br>1つ多い けため</td></tr>
+      <tr><td>上から2けたのがい数</td><td class="c">上から3けため</td></tr>
+      <tr><td>上から3けたのがい数</td><td class="c">上から4けため</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">四捨五入マシン（自分で ためそう）</h3>
+  <div class="machine">
+    <div class="mrow">
+      <div class="mfield">
+        <label for="numIn">もとの数</label>
+        <input type="number" id="numIn" value="287428" min="1" max="99999999" step="1">
+      </div>
+      <div class="mfield">
+        <label for="targetIn">どんな がい数に する？</label>
+        <select id="targetIn">
+          <option value="m10000">一万の位までのがい数</option>
+          <option value="m1000">千の位までのがい数</option>
+          <option value="m100">百の位までのがい数</option>
+          <option value="m10">十の位までのがい数</option>
+          <option value="u1">上から1けたのがい数</option>
+          <option value="u2">上から2けたのがい数</option>
+          <option value="u3">上から3けたのがい数</option>
+        </select>
+      </div>
+      <button class="btn" id="goMachine" type="button">やってみる</button>
+    </div>
+    <div id="ptable" class="ptable" aria-live="polite"></div>
+    <p class="saybig" id="mSay"></p>
+    <p class="saysub" id="mSub"></p>
+  </div>
+
+  <h3 class="sub">どの位で 四捨五入する？（クイズ）</h3>
+  <div class="qlist" id="quizA"></div>
+</section>
+
+<!-- ===== 3 はんい ===== -->
+<section class="panel" id="p3" role="tabpanel">
+  <div class="sechead"><h2>もとの数の はんい</h2><span class="tag">以上・以下・未満</span></div>
+  <div class="howto">「四捨五入して 300 になった。もとは いくつから いくつまで？」という 問題です。<b>はんいの はし＝概数 ± 位の半分</b>。百の位までなら 半分は 50 なので、300−50＝250、300＋50＝350。</div>
+
+  <div class="cards3">
+    <div class="mini" style="border-top:5px solid var(--ai)">
+      <h4>以上（いじょう）</h4>
+      <p class="big">その数も 入る</p>
+      <p>「250以上」＝250も 入る。250、251、252…</p>
+    </div>
+    <div class="mini" style="border-top:5px solid var(--green)">
+      <h4>以下（いか）</h4>
+      <p class="big">その数も 入る</p>
+      <p>「350以下」＝350も 入る。…348、349、350</p>
+    </div>
+    <div class="mini" style="border-top:5px solid var(--shu)">
+      <h4>未満（みまん）</h4>
+      <p class="big">その数は 入らない</p>
+      <p>「350未満」＝350は 入らない。…348、349 まで</p>
+    </div>
+  </div>
+
+  <h3 class="sub">はんい 計算機</h3>
+  <div class="machine">
+    <div class="mrow">
+      <div class="mfield">
+        <label for="rgNum">四捨五入して この数に なった</label>
+        <input type="number" id="rgNum" value="300" min="1" step="100">
+      </div>
+      <div class="mfield">
+        <label for="rgPlace">どの位までのがい数？</label>
+        <select id="rgPlace">
+          <option value="100">百の位まで（十の位で四捨五入）</option>
+          <option value="10">十の位まで（一の位で四捨五入）</option>
+          <option value="1000">千の位まで（百の位で四捨五入）</option>
+          <option value="10000">一万の位まで（千の位で四捨五入）</option>
+        </select>
+      </div>
+      <button class="btn" id="goRange" type="button">しらべる</button>
+    </div>
+    <div class="nl" id="rgBox"></div>
+    <p class="saybig" id="rgSay"></p>
+    <p class="saysub" id="rgSub"></p>
+  </div>
+
+  <h3 class="sub">クイズ</h3>
+  <div class="qlist" id="quizB"></div>
+</section>
+
+<!-- ===== 4 見積もり ===== -->
+<section class="panel" id="p4" role="tabpanel">
+  <div class="sechead"><h2>見積もり</h2><span class="tag ai">目的で 方法を えらぶ</span></div>
+  <div class="howto">見積もりは <b>「何を知りたいか」で 方法が かわります</b>。ここが いちばん おもしろいところ。四捨五入だけが がい数じゃ ありません。</div>
+
+  <table class="rule">
+    <thead><tr><th style="width:38%">知りたいこと</th><th>つかう方法</th><th style="width:26%">なぜ</th></tr></thead>
+    <tbody>
+      <tr><td>だいたい いくら？</td><td class="c"><b>四捨五入</b></td><td>ふつうの およその数</td></tr>
+      <tr><td>1000円で <b>たりる</b>？</td><td class="c"><b>切り上げ</b>（多めに 見る）</td><td>多めに 見て たりれば、かならず たりる</td></tr>
+      <tr><td>1000円を <b>こえる</b>？</td><td class="c"><b>切り捨て</b>（少なめに 見る）</td><td>少なめに 見て こえれば、かならず こえる</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">和・差の 見積もり（百の位まで）</h3>
+  <table class="rule">
+    <thead><tr><th>もとの式</th><th>がい数の式</th><th>見積もりの答え</th><th>本物の答え</th></tr></thead>
+    <tbody>
+      <tr><td>587 ＋ 412</td><td class="c">600 ＋ 400</td><td class="c"><b>約1000</b></td><td class="c">999</td></tr>
+      <tr><td>823 − 467</td><td class="c">800 − 500</td><td class="c"><b>約300</b></td><td class="c">356</td></tr>
+      <tr><td>1000 − 278 − 361</td><td class="c">1000 − 300 − 400</td><td class="c"><b>約300</b></td><td class="c">361</td></tr>
+    </tbody>
+  </table>
+  <p class="saysub" style="text-align:left">※ たし算・ひき算は <b>百の位まで</b>の がい数で 見積もるのが ふつう。位を そろえて 計算できるからです。</p>
+
+  <h3 class="sub">積・商の 見積もり（上から1けた）</h3>
+  <table class="rule">
+    <thead><tr><th>もとの式</th><th>がい数の式</th><th>見積もりの答え</th><th>本物の答え</th></tr></thead>
+    <tbody>
+      <tr><td>486 × 307</td><td class="c">500 × 300</td><td class="c"><b>約150000</b></td><td class="c">149202</td></tr>
+      <tr><td>63820 ÷ 31</td><td class="c">60000 ÷ 30</td><td class="c"><b>約2000</b></td><td class="c">2058あまり22</td></tr>
+    </tbody>
+  </table>
+  <p class="saysub" style="text-align:left">※ かけ算・わり算は <b>上から1けた</b>の がい数で 見積もる。けた数が ちがう数を 百の位までに そろえても、意味が ないからです。</p>
+
+  <h3 class="sub">どの方法を えらぶ？（クイズ）</h3>
+  <div class="qlist" id="quizC"></div>
+
+  <h3 class="sub">式を えらぶ クイズ</h3>
+  <div class="qlist" id="quizD"></div>
+</section>
+
+<!-- ===== 5 にている問題 ===== -->
+<section class="panel" id="p5" role="tabpanel">
+  <div class="sechead"><h2>にている問題で たしかめる</h2><span class="tag">10題</span></div>
+  <div class="howto">本物の 問題と <b>同じ形・ちがう数</b>で 作りました。形が 同じなので、とき方が そのまま 使えます。「とき方」を ひらくと、手じゅんが 出ます。<b>先に 自分で 考えてから</b> ひらこう。</div>
+  <div id="testItems"></div>
+</section>
+
+<!-- ===== 6 一問一答 ===== -->
+<section class="panel" id="p6" role="tabpanel">
+  <div class="sechead"><h2>一問一答</h2><span class="tag">12問</span></div>
+  <div class="howto">まちがえた問題は、その 番号の タブに もどって たしかめよう。ぜんぶ ○に なるまで くり返すのが いちばん 早い。</div>
+  <div class="qlist" id="quizE"></div>
+</section>
+
+<footer class="wrap">
+  もとにした資料：東京書籍「新編 新しい算数 4上」7 がい数の表し方と使い方（p.118〜130）と、その教師用指導書（第1〜8時の目標・板書例・つまずき）。<br>
+  <b>この画面の数値と答えは、すべて教科書・指導書と照合し、計算し直して確認しています。</b>
+</footer>
+</main>
+<script>
+/* ===================== ふりがな ===================== */
+const RUBY=[["四捨五入","ししゃごにゅう"],["未満","みまん"],["見積","みつもり"],["見当","けんとう"],["範囲","はんい"],["概数","がいすう"]];
+const RX=new RegExp(RUBY.map(r=>r[0]).join("|"),"g");
+const RMAP=Object.fromEntries(RUBY);
+function addRuby(root){
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){
+    const p=n.parentElement; if(!p) return NodeFilter.FILTER_REJECT;
+    if(p.closest("ruby,svg,textarea,script,style,select,option,.noR")) return NodeFilter.FILTER_REJECT;
+    RX.lastIndex=0; return RX.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;}});
+  const list=[]; while(w.nextNode()) list.push(w.currentNode);
+  list.forEach(n=>{
+    const frag=document.createDocumentFragment(); let last=0; const s=n.nodeValue; RX.lastIndex=0; let m;
+    while((m=RX.exec(s))){
+      if(m.index>last) frag.appendChild(document.createTextNode(s.slice(last,m.index)));
+      const r=document.createElement("ruby"); r.textContent=m[0];
+      const rt=document.createElement("rt"); rt.textContent=RMAP[m[0]]; r.appendChild(rt); frag.appendChild(r);
+      last=m.index+m[0].length;
+    }
+    if(last<s.length) frag.appendChild(document.createTextNode(s.slice(last)));
+    n.parentNode.replaceChild(frag,n);
+  });
+}
+function plain(el){const c=el.cloneNode(true);c.querySelectorAll("rt,.say").forEach(x=>x.remove());return c.textContent.replace(/\s+/g," ").trim();}
+
+/* ===================== 読み上げ ===================== */
+const SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" style="width:13px;height:13px"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg>';
+let sayOn=true;
+function sayBtn(getEl){
+  const b=document.createElement("button"); b.className="say"; b.type="button"; b.innerHTML=SPK+"読む";
+  b.style.cssText="border:1.5px solid #ddd6c6;background:#fffdf8;border-radius:999px;padding:0 9px;font-size:.72rem;display:inline-flex;align-items:center;gap:3px;color:#5a6779;margin-left:6px;vertical-align:middle";
+  b.addEventListener("click",e=>{ e.stopPropagation(); if(!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(plain(getEl())); u.lang="ja-JP"; u.rate=.88; speechSynthesis.speak(u);});
+  return b;
+}
+
+/* ===================== スコア ===================== */
+const done=new Set(); let total=0;
+function upd(){document.getElementById("sc").textContent=done.size;document.getElementById("scAll").textContent=total;}
+function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+
+/* ===================== 位取り図（フォロー用） ===================== */
+const PVN={0:"一",1:"十",2:"百",3:"千",4:"万",5:"十万",6:"百万",7:"千万"};
+function pvChart(n,re){
+  const str=String(n), L=str.length;
+  let h='<div class="pv">';
+  for(let i=0;i<L;i++){
+    const e=L-1-i;
+    h+='<div class="pvc'+(e===re?' dec':'')+'">'
+      +(e===re?'<span class="pvl">ここを見る▼</span>':'<span class="pvl">&nbsp;</span>')
+      +'<span class="pvp">'+PVN[e]+'の位</span>'
+      +'<span class="pvd">'+str[i]+'</span></div>';
+  }
+  return h+'</div>';
+}
+/* ===================== 図解（誤答フォロー共通） ===================== */
+function pvChart2(d){
+  const str=String(d.n), L=str.length;
+  let h='<div class="pv"><div class="pvside">もとの数</div>';
+  for(let i=0;i<L;i++){
+    const e=L-1-i;
+    h+='<div class="pvc'+(e===d.re?' dec':'')+'">'
+      +(e===d.re?'<span class="pvl">ここを見る▼</span>':'<span class="pvl">&nbsp;</span>')
+      +'<span class="pvp">'+PVN[e]+'の位</span>'
+      +'<span class="pvd">'+str[i]+'</span></div>';
+  }
+  return h+'</div>';
+}
+function calChart(d){
+  let h='<table class="cal"><tr><th>もとの数</th><th>見る位</th><th>その数字</th><th>がい数</th></tr>';
+  d.rows.forEach(r=>{
+    h+='<tr><td class="big">'+r[0]+'</td><td>'+r[1]+'</td><td class="'+(r[3]?'up':'stay')+'">'+r[2]+'</td><td class="big">'+r[4]+'</td></tr>';
+  });
+  h+='</table>';
+  if(d.eq) h+='<p class="caleq">'+d.eq+'</p>';
+  return h;
+}
+function methodChart(d){
+  const items=[
+    ['四捨五入','まん中に そろえる','だいたい いくら？'],
+    ['切り上げ','大きい方に そろえる','たりる？'],
+    ['切り捨て','小さい方に そろえる','こえる？']
+  ];
+  let h='<div class="mch">';
+  items.forEach((it,i)=>{
+    h+='<div class="mcol'+(i===d.pick?' on':'')+'"><b>'+it[0]+'</b><span>'+it[1]+'</span><em>'+it[2]+'</em></div>';
+  });
+  return h+'</div>';
+}
+function termChart(d){
+  const items=[['以上','その数も 入る','250以上 → 250も 入る'],['以下','その数も 入る','350以下 → 350も 入る'],['未満','その数は 入らない','350未満 → 350は 入らない']];
+  let h='<div class="mch terms">';
+  items.forEach((it,i)=>{
+    h+='<div class="mcol'+(i===d.pick?' on':'')+'"><b>'+it[0]+'</b><span>'+it[1]+'</span><em>'+it[2]+'</em></div>';
+  });
+  return h+'</div>';
+}
+function diagHTML(d){
+  if(!d) return '';
+  if(d.type==='pv') return pvChart2(d);
+  if(d.type==='nl'){
+    const box=document.createElement('div'); box.className='nlbox';
+    drawNL(box,d);
+    return box.innerHTML;
+  }
+  if(d.type==='calc') return calChart(d);
+  if(d.type==='method') return methodChart(d);
+  if(d.type==='terms') return termChart(d);
+  return '';
+}
+function followHTML(d){
+  if(!d.steps||!d.steps.length) return '';
+  let h=diagHTML(d.diag);
+  h+='<div class="fixbox"><b>見る じゅんばん</b><ol class="fixsteps">'
+    + d.steps.map(x=>'<li>'+x+'</li>').join('')+'</ol></div>';
+  h+='<p class="fixend">まちがえても だいじょうぶ。上の 図と 順番で、もう いちど えらんでみよう。</p>';
+  return h;
+}
+
+/* ===================== クイズ ===================== */
+function buildQuiz(host,data,prefix,withSay){
+  data.forEach((d,i)=>{
+    total++; const id=prefix+i;
+    const q=document.createElement("div"); q.className="q";
+    q.innerHTML='<div class="qh"><span class="qn">'+(i+1)+'</span><div class="qt">'+d.q+'</div></div><div class="choices"></div><div class="fb"></div><button class="retry" type="button">もう一回</button>';
+    const qt=q.querySelector(".qt");
+    if(withSay) qt.appendChild(sayBtn(()=>qt));
+    const box=q.querySelector(".choices"), fb=q.querySelector(".fb"), rt=q.querySelector(".retry");
+    const idx=shuffle(d.c.map((v,j)=>j));
+    idx.forEach(j=>{
+      const b=document.createElement("button"); b.type="button"; b.className="ch"; b.textContent=d.c[j];
+      b.addEventListener("click",()=>{
+        if(box.dataset.locked) return;
+        if(j===d.a){
+          b.classList.add("ok"); box.dataset.locked="1";
+          fb.className="fb ok show"; fb.innerHTML='<span class="mk">○</span>'+d.e+followHTML(d);
+          done.add(id); upd(); rt.classList.add("show");
+          box.querySelectorAll(".ch").forEach(x=>x.disabled=true);
+        } else {
+          b.classList.add("ng"); b.disabled=true;
+          fb.className="fb ng show";
+          var fix=followHTML(d);
+          if(!fix) fix='<span style="font-size:.88rem">もう いちど 考えてみよう。</span>';
+          fb.innerHTML='<span class="mk">×</span>おしい！ いっしょに たしかめよう。'+fix;
+        }
+      });
+      box.appendChild(b);
+    });
+    rt.addEventListener("click",()=>{
+      delete box.dataset.locked; done.delete(id); upd();
+      fb.className="fb"; fb.innerHTML=""; rt.classList.remove("show");
+      box.querySelectorAll(".ch").forEach(x=>{x.disabled=false;x.classList.remove("ok","ng");});
+    });
+    q.__d=d;
+    host.appendChild(q);
+  });
+}
+
+/* ===================== 数直線 ===================== */
+function drawNL(el,o){
+  const W=820,H=132,pad=76;
+  const lo=o.lo, hi=o.hi;
+  const x=v=>pad+(v-lo)/(hi-lo)*(W-pad*2);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block">';
+  if(o.shade){
+    s+='<rect x="'+x(o.shade.from)+'" y="52" width="'+(x(o.shade.to)-x(o.shade.from))+'" height="32" fill="rgba(47,109,181,.15)" stroke="#2f6db5" stroke-width="1.3" stroke-dasharray="6 4" rx="3"/>';
+  }
+  s+='<line x1="'+x(lo)+'" y1="68" x2="'+x(hi)+'" y2="68" stroke="#20293a" stroke-width="2.6"/>';
+  (o.ticks||[]).forEach(t=>{
+    s+='<line x1="'+x(t.v)+'" y1="60" x2="'+x(t.v)+'" y2="76" stroke="#20293a" stroke-width="2"/>';
+    s+='<text x="'+x(t.v)+'" y="98" text-anchor="middle" font-size="15" font-weight="700" fill="#20293a" font-family="BIZ UDPGothic">'+(t.label!==undefined?t.label:t.v.toLocaleString())+'</text>';
+  });
+  if(o.marker!==undefined && o.marker!==null){
+    s+='<circle cx="'+x(o.marker)+'" cy="68" r="9" fill="#cf4a3c"/>';
+    s+='<text x="'+x(o.marker)+'" y="42" text-anchor="middle" font-size="18" font-weight="900" fill="#cf4a3c" font-family="Zen Maru Gothic">'+o.marker.toLocaleString()+'</text>';
+  }
+  s+='</svg>';
+  el.innerHTML=s;
+}
+
+/* ===================== タブ ===================== */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected","false"));
+    document.querySelectorAll("section.panel").forEach(x=>x.classList.remove("on"));
+    t.setAttribute("aria-selected","true");
+    document.getElementById(t.dataset.p).classList.add("on");
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+});
+
+/* ===================== ① 数直線スライダー ===================== */
+const nlRange=document.getElementById("nlRange"), nlBox=document.getElementById("nlBox"),
+      nlVal=document.getElementById("nlVal"), nlSay=document.getElementById("nlSay"), nlSub=document.getElementById("nlSub");
+function updNL(){
+  const v=+nlRange.value;
+  nlVal.textContent=v.toLocaleString();
+  drawNL(nlBox,{lo:20000,hi:30000,marker:v,ticks:[{v:20000},{v:25000,label:"25000（まん中）"},{v:30000}]});
+  const near = v<25000 ? 20000 : 30000;
+  nlSay.innerHTML='いちばん 近いのは <span class="n">'+near.toLocaleString()+'</span>　→　がい数は <em>'+near.toLocaleString()+'</em>';
+  nlSub.textContent = v===25000 ? "ちょうど まん中。こういうときは 大きい方（30000）に そろえます。" :
+    (v<25000 ? "25000より 小さいから、20000に 近い。" : "25000より 大きいから、30000に 近い。");
+}
+if(nlRange){ nlRange.addEventListener("input",updNL); updNL(); }
+
+/* ===================== ② 四捨五入マシン ===================== */
+const PN={0:"一",1:"十",2:"百",3:"千",4:"万",5:"十万",6:"百万",7:"千万"};
+const CN=["①","②","③","④","⑤","⑥","⑦","⑧"];
+const TGT={
+  m10000:{label:"一万の位まで",round:3},
+  m1000:{label:"千の位まで",round:2},
+  m100:{label:"百の位まで",round:1},
+  m10:{label:"十の位まで",round:0},
+  u1:{label:"上から1けた",up:1},
+  u2:{label:"上から2けた",up:2},
+  u3:{label:"上から3けた",up:3}
+};
+const numIn=document.getElementById("numIn"), targetIn=document.getElementById("targetIn"),
+      ptable=document.getElementById("ptable"), mSay=document.getElementById("mSay"), mSub=document.getElementById("mSub");
+function runMachine(){
+  const n=parseInt(numIn.value,10);
+  if(!n||n<1||n>99999999){ ptable.innerHTML=''; mSay.textContent="1〜99999999 の数を 入れてね"; mSub.textContent=""; return; }
+  const d=String(n).length, t=TGT[targetIn.value];
+  const re = t.up ? (d-1-t.up) : t.round;
+  if(re<0 || re>d-1){
+    ptable.innerHTML='';
+    mSay.innerHTML="この数は 小さすぎて、その がい数には できません";
+    mSub.textContent="もっと 大きい数を 入れるか、「上から」の けためを 小さくしよう";
+    return;
+  }
+  const step=Math.pow(10,re), unit=step*10;
+  const lower=Math.floor(n/unit)*unit, dg=Math.floor(n/step)%10;
+  const res = dg>=5 ? lower+unit : lower;
+  const resStr=String(res), L=Math.max(d,resStr.length), raw=String(n), pad=L-d;
+  let cells="";
+  for(let i=0;i<L;i++){
+    const e=L-1-i;
+    const cls = e>re ? "keep" : (e===re ? "decide" : "drop");
+    const rd = Math.floor(res/Math.pow(10,e))%10;
+    const chg=(e>re && i>=pad && rd!==+raw[i-pad])?" chg":"";
+    cells+='<div class="pcol '+cls+chg+'">'
+      + '<div class="up" style="font-size:.56rem;color:#2f6db5;height:1.05em;line-height:1;font-weight:700">'+(t.up?(i<pad?"":CN[i]):(e===re?"▼ここ":""))+'</div>'
+      + '<div class="ph">'+PN[e]+'の位</div>'
+      + '<div class="dg'+(i<pad?" ghost":"")+'">'+(i<pad?"0":raw[i-pad])+'</div>'
+      + '<div style="font-size:.7rem;color:#8b93a1;line-height:1.1">↓</div>'
+      + '<div class="res">'+rd+'</div>'
+      + '</div>';
+  }
+  ptable.innerHTML=cells;
+  mSay.innerHTML='<span style="color:#cf4a3c">'+PN[re]+'の位</span>の <span class="n">'+dg+'</span> を 四捨五入 → '
+    + (dg>=5?'5以上だから <b>くり上げ</b>':'4以下だから <b>そのまま</b>')
+    + '　→　<em>'+res.toLocaleString()+'</em>';
+  mSub.textContent = t.up
+    ? t.label+' なので、四捨五入するのは 上から'+(t.up+1)+'けため（'+PN[re]+'の位）'
+    : t.label+' なので、四捨五入するのは 1つ下の '+PN[re]+'の位';
+}
+if(numIn){
+  document.getElementById("goMachine").addEventListener("click",runMachine);
+  numIn.addEventListener("input",runMachine);
+  targetIn.addEventListener("change",runMachine);
+  runMachine();
+}
+
+/* ===================== ③ はんい計算機 ===================== */
+const rgNum=document.getElementById("rgNum"), rgPlace=document.getElementById("rgPlace"),
+      rgBox=document.getElementById("rgBox"), rgSay=document.getElementById("rgSay"), rgSub=document.getElementById("rgSub");
+function runRange(){
+  const N=parseInt(rgNum.value,10)||0, p=+rgPlace.value;
+  if(N<1){ rgBox.innerHTML=""; rgSay.textContent="1より 大きい数を 入れてね"; rgSub.textContent=""; return; }
+  const half=p/2, mn=N-half, mx=N+half;
+  drawNL(rgBox,{lo:mn-p*0.4,hi:mx+p*0.4,shade:{from:mn,to:mx},ticks:[
+    {v:mn,label:mn.toLocaleString()},
+    {v:N,label:N.toLocaleString()},
+    {v:mx,label:mx.toLocaleString()}
+  ]});
+  const Pl={10:"十の位",100:"百の位",1000:"千の位",10000:"一万の位"}[p];
+  rgSay.innerHTML='<span class="n">'+mn.toLocaleString()+'</span> 以上 <span class="n">'+mx.toLocaleString()+'</span> 未満';
+  rgSub.innerHTML='整数で いうと <b>'+(mn).toLocaleString()+' 〜 '+(mx-1).toLocaleString()+'</b>。'
+    + '<br>（'+Pl+'まで なので、はんいは '+(p/2).toLocaleString()+' ずつ。'+N.toLocaleString()+'−'+(p/2).toLocaleString()+'＝'+mn.toLocaleString()+'、'
+    + N.toLocaleString()+'＋'+(p/2).toLocaleString()+'＝'+mx.toLocaleString()+'。'+mx.toLocaleString()+' は 未満なので 入りません）';
+}
+if(rgNum){
+  document.getElementById("goRange").addEventListener("click",runRange);
+  rgNum.addEventListener("input",runRange);
+  rgPlace.addEventListener("change",runRange);
+  runRange();
+}
+
+/* ===================== クイズ データ ===================== */
+buildQuiz(document.getElementById("quizA"),[
+ {q:"287428 を 一万の位までのがい数にするとき、四捨五入するのは どの位？",
+  c:["万の位","千の位","百の位","十万の位"],a:1,diag:{type:"pv",n:287428,re:3},
+  e:"一万の位まで → 1つ下の 千の位。287428 の 千の位は 7 だから くり上げ → 290000。",
+  steps:["「一万の位まで」と 書いてあったら、<b>1つ下</b>の 位を見る。","一万の位の 1つ下は <b>千の位</b>。だから 千の位を 四捨五入する。","千の位の 数字は <b>7</b>。5以上だから <b>くり上げ</b>て 290000。"]},
+ {q:"287428 を 上から1けたのがい数にするとき、四捨五入するのは？",
+  c:["上から1けため（十万の位）","上から2けため（万の位）","上から3けため（千の位）","いちばん下の位"],a:1,diag:{type:"pv",n:287428,re:4},
+  e:"上から1けた → 上から2けため。万の位の 8 を 四捨五入 → 300000。",
+  steps:["「上から1けた」は、<b>上から1つ多い けため</b>を見る。","上から2けためは <b>万の位</b>（左から2番目）。","万の位の 数字は <b>8</b>。5以上だから <b>くり上げ</b>て 300000。"]},
+ {q:"51745 を 千の位までのがい数にするとき、四捨五入するのは？",
+  c:["千の位","百の位","十の位","一万の位"],a:1,diag:{type:"pv",n:51745,re:2},
+  e:"千の位まで → 1つ下の 百の位。百の位の 7 を 四捨五入 → 52000。",
+  steps:["「千の位まで」と 書いてあったら、<b>1つ下</b>の 位を見る。","千の位の 1つ下は <b>百の位</b>。","百の位の 数字は <b>7</b>。5以上だから 千の位が 1→2 に <b>くり上がる</b>（52000）。"]},
+ {q:"上から2けたのがい数にするとき、四捨五入するのは？",
+  c:["上から1けため","上から2けため","上から3けため","上から4けため"],a:2,diag:{type:"pv",n:287428,re:3},
+  e:"上から2けた → 上から3けため。287428 なら 千の位の 7 → 290000。",
+  steps:["「上から2けた」は、<b>上から3けため</b>を見る（けた＋1）。","287428 の 上から3けためは <b>千の位</b>。","その 数字は <b>7</b>。5以上だから くり上げて 290000。"]},
+ {q:"6847 を 百の位までのがい数にすると？",
+  c:["6800","6900","7000","6000"],a:0,diag:{type:"pv",n:6847,re:1},
+  e:"百の位まで → 十の位で四捨五入。十の位は 4 だから そのまま → 6800。",
+  steps:["「百の位まで」なので、見るのは <b>1つ下</b>の 十の位。","十の位の 数字は <b>4</b>。","0〜4 は <b>そのまま</b>。百の位より下を 0 にして 6800。"]}
+],"A",true);
+
+buildQuiz(document.getElementById("quizB"),[
+ {q:"「125kg未満」に 入るのは どれ？",
+  c:["125kg","125.1kg","124.9kg","126kg"],a:2,
+  diag:{type:"nl",lo:123,hi:127,marker:124.9,shade:{from:123,to:125},ticks:[{v:125,label:"125kg"},{v:124.9,label:"124.9kg"}]},
+  e:"未満は「その数より 小さい」。124.9 は 125 より 小さいので 入る。125 は 入らない。",
+  steps:["<b>未満</b>＝「その数は 入らない」。まず その数を 消す。","入るのは <b>125 より 小さい数</b>だけ（図の 青い所）。","124.9 は 125 より 小さい → <b>入る</b>。126・125.1 は 大きいので 入らない。"]},
+ {q:"百の位までのがい数にすると 400 になる整数で、いちばん 大きい数は？",
+  c:["399","400","449","450"],a:2,
+  diag:{type:"nl",lo:300,hi:500,shade:{from:350,to:450},ticks:[{v:350,label:"350（下はし）"},{v:400},{v:449,label:"449（上はし）"},{v:450,label:"450→500"}]},
+  e:"十の位が 0〜4 なら 400。449 まで。450 は 十の位が 5 なので 500 に なります。",
+  steps:["百の位まで → <b>十の位</b>で 四捨五入。","十の位が <b>0〜4</b> なら 400 のまま。","十の位が 4 で いちばん大きいのは <b>449</b>。450 は 十の位が 5 なので <b>500</b> に なってしまう。"]},
+ {q:"十の位までのがい数にすると 150 になる整数で、いちばん 小さい数は？",
+  c:["140","145","149","150"],a:1,
+  diag:{type:"nl",lo:140,hi:160,shade:{from:145,to:155},ticks:[{v:145,label:"145（下はし）"},{v:150},{v:155,label:"155（上はし）"}]},
+  e:"一の位が 5〜9 なら くり上げて 150。いちばん小さいのは 145。144 は 140 に なります。",
+  steps:["十の位まで → <b>一の位</b>で 四捨五入。","一の位が <b>5〜9</b> なら くり上がって 150。","一の位が 5 で いちばん小さいのは <b>145</b>。144 は 一の位が 4 なので <b>140</b> に なってしまう。"]},
+ {q:"「以上」の 意味は？",
+  c:["その数より 大きい（その数は 入らない）","その数と 等しいか、それより 大きい","その数より 小さい（その数は 入らない）","その数と 等しいか、それより 小さい"],a:1,diag:{type:"terms",pick:0},
+  e:"以上＝その数も 入る。未満＝入らない。以下＝その数も 入る（小さい方）。",
+  steps:["3つの 言葉を ならべて おぼえる。","<b>以上</b>＝その数も 入る（大きい方へ）。<b>未満</b>＝その数は 入らない。","「250以上」なら 250 も 入る。図の 3つを 見くらべよう。"]}
+],"B",true);
+
+buildQuiz(document.getElementById("quizC"),[
+ {q:"おかしを 買って、だいたい いくらか 知りたい。どの方法？",
+  c:["四捨五入","切り上げ","切り捨て"],a:0,diag:{type:"method",pick:0},
+  e:"「だいたい」を知りたいときは 四捨五入。ふつうの およその数です。",
+  steps:["聞かれている 言葉を さがす。キーワードは <b>「だいたい」「およそ」</b>。","「だいたい」＝ まん中に そろえる → <b>四捨五入</b>。","切り上げ・切り捨ては、たりるか・こえるかを しらべる ときに 使う。"]},
+ {q:"1000円で たりるか 知りたい。どの方法？",
+  c:["四捨五入","切り上げ","切り捨て"],a:1,diag:{type:"method",pick:1},
+  e:"多めに 見て たりれば、かならず たりる。だから 切り上げ。",
+  steps:["聞かれているのは <b>「たりる？」</b>。","高く 見つもって それでも たりれば、かならず たりる → <b>切り上げ</b>。","「たりる？」＝切り上げ。「こえる？」＝切り捨て。セットで おぼえる。"]},
+ {q:"1000円を こえるか 知りたい。どの方法？",
+  c:["四捨五入","切り上げ","切り捨て"],a:2,diag:{type:"method",pick:2},
+  e:"少なめに 見て こえれば、かならず こえる。だから 切り捨て。",
+  steps:["聞かれているのは <b>「こえる？」</b>。","少なく 見つもって それでも こえれば、かならず こえる → <b>切り捨て</b>。","「たりる？」は 切り上げ、「こえる？」は 切り捨て。反対に なるので 注意。"]},
+ {q:"「切り捨て」とは？",
+  c:["四捨五入して 大きい方に そろえる","小さい方の きりのよい数に する","大きい方の きりのよい数に する","まん中に そろえる"],a:1,diag:{type:"method",pick:2},
+  e:"切り捨て＝小さい方の きりのよい数。切り上げ＝大きい方の きりのよい数。",
+  steps:["名前の とおりに 考える。","<b>切り捨て</b>＝下の けたちを ばっさり すてる → 数は <b>小さく</b> なる。","378 を 百の位まで 切り捨て → 300。切り上げ → 400。図で たしかめよう。"]}
+],"C",true);
+
+buildQuiz(document.getElementById("quizD"),[
+ {q:"587 ＋ 412 を、四捨五入して 百の位までのがい数にして 見積もる式は？",
+  c:["500 ＋ 400","600 ＋ 400","600 ＋ 500","500 ＋ 500"],a:1,
+  diag:{type:"calc",rows:[["587","十の位","8","切り上げ","600"],["412","十の位","1","そのまま","400"]],eq:"600 ＋ 400 ＝ 1000（本物は 999）"},
+  e:"百の位まで → 十の位で四捨五入。587→600、412→400。600＋400＝1000。",
+  steps:["和・差は <b>百の位まで</b>。見るのは <b>十の位</b>。","587 … 十の位は <b>8</b> → 5以上なので <b>600</b>。","412 … 十の位は <b>1</b> → 0〜4なので <b>400</b>。600＋400＝1000。"]},
+ {q:"823 − 467 を、四捨五入して 百の位までのがい数にして 見積もる式は？",
+  c:["800 − 400","800 − 500","900 − 500","900 − 400"],a:1,
+  diag:{type:"calc",rows:[["823","十の位","2","そのまま","800"],["467","十の位","6","切り上げ","500"]],eq:"800 − 500 ＝ 300（本物は 356）"},
+  e:"823→800（十の位2）、467→500（十の位6）。800−500＝300。",
+  steps:["和・差は <b>百の位まで</b>。見るのは <b>十の位</b>。","823 … 十の位は <b>2</b> → <b>800</b>。","467 … 十の位は <b>6</b> → 5以上なので <b>500</b>。800−500＝300。"]},
+ {q:"486 × 307 を、四捨五入して 上から1けたのがい数にして 見積もる式は？",
+  c:["500 × 300","400 × 300","500 × 400","400 × 400"],a:0,
+  diag:{type:"calc",rows:[["486","上から2けため","8","切り上げ","500"],["307","上から2けため","0","そのまま","300"]],eq:"500 × 300 ＝ 150000（本物は 149202）"},
+  e:"上から1けた → 上から2けためで四捨五入。486→500、307→300。500×300＝150000。",
+  steps:["積・商は <b>上から1けた</b>。見るのは <b>上から2けため</b>。","486 … 上から2けためは <b>8</b> → <b>500</b>。","307 … 上から2けためは <b>0</b> → <b>300</b>。500×300＝150000。"]},
+ {q:"63820 ÷ 31 を、四捨五入して 上から1けたのがい数にして 見積もる式は？",
+  c:["60000 ÷ 30","60000 ÷ 40","70000 ÷ 30","70000 ÷ 40"],a:0,
+  diag:{type:"calc",rows:[["63820","上から2けため","3","そのまま","60000"],["31","上から2けため","1","そのまま","30"]],eq:"60000 ÷ 30 ＝ 2000（本物は 2058あまり22）"},
+  e:"63820→60000（上から2けため3）、31→30。60000÷30＝2000。",
+  steps:["積・商は <b>上から1けた</b>。見るのは <b>上から2けため</b>。","63820 … 上から2けためは <b>3</b> → <b>60000</b>。","31 … 上から2けためは <b>1</b> → <b>30</b>。60000÷30＝2000。"]}
+],"D",true);
+
+buildQuiz(document.getElementById("quizE"),[
+ {q:"およその数のことを 何という？",c:["がい数","整数","小数","数直線"],a:0,
+  e:"およその数＝がい数。21034 → 約20000 のように 表す。",
+  steps:["「およその数」と 同じ 意味の 言葉を さがす。","答えは <b>がい数</b>。「およそ」「約」が ついた 数は がい数。","21034 → 約20000 のように、だいたいの 大きさを 表した数。"]},
+ {q:"四捨五入で 見るのは、どの位の数字？",c:["がい数にしたい位そのもの","がい数にしたい位の 1つ下の位","いちばん上の位","いちばん下の位"],a:1,diag:{type:"pv",n:6847,re:1},
+  e:"「百の位まで」なら 十の位を見る。1つ下の位だけ。",
+  steps:["「〜の位まで」は <b>1つ下</b>の 位を 見る。","たとえば 百の位までなら、見るのは <b>十の位</b>（図の 赤い所）。","見る 位は <b>1つだけ</b>。その 右がわは ぜんぶ 0 に なる。"]},
+ {q:"見た数字が 0〜4 のとき、どうする？",c:["そのまま（切り捨て）","くり上げる","2倍する","0に する"],a:0,diag:{type:"pv",n:6847,re:1},
+  e:"0〜4 は そのまま。5〜9 は くり上げる。",
+  steps:["見る 位の 数字を 読む。ここでは <b>4</b>。","4 は <b>0〜4</b> の グループ。","0〜4 は <b>そのまま</b>。だから 6847 → 6800。"]},
+ {q:"見た数字が 5〜9 のとき、どうする？",c:["そのまま","くり上げる","半分に する","その位を 消す"],a:1,diag:{type:"pv",n:51745,re:2},
+  e:"5〜9 は くり上げる。ちょうど5でも くり上げ（1500は 2000）。",
+  steps:["見る 位の 数字を 読む。ここでは <b>7</b>。","7 は <b>5〜9</b> の グループ。","5〜9 は <b>くり上げ</b>。ちょうど 5 でも くり上げる（1500 → 2000）。"]},
+ {q:"「一万の位までのがい数」で 四捨五入する位は？",c:["万の位","千の位","十万の位","百の位"],a:1,diag:{type:"pv",n:287428,re:3},
+  e:"1つ下の 千の位。",
+  steps:["「一万の位まで」→ <b>1つ下</b>の 位。","一万の位の 1つ下は <b>千の位</b>（図の 赤い所）。","千の位の 7 を 見て、くり上げ → 290000。"]},
+ {q:"「上から1けたのがい数」で 四捨五入する位は？",c:["上から1けため","上から2けため","いちばん下の位","上から3けため"],a:1,diag:{type:"pv",n:287428,re:4},
+  e:"上から1つ多い けため＝上から2けため。",
+  steps:["「上から○けた」は <b>上から（○＋1）けため</b>を 見る。","上から1けたなら、上から <b>2けため</b>（万の位）。","数字は 8 → くり上げ → 300000。"]},
+ {q:"「以上」は その数を 入れる？",c:["入れる","入れない"],a:0,diag:{type:"terms",pick:0},
+  e:"以上＝入れる。以下＝入れる（小さい方）。未満＝入れない。",
+  steps:["3つの 言葉を ならべて 考える。","<b>以上</b>＝その数も 入る。「250以上」なら 250 も 入る。","<b>未満</b> だけが 入らない。図で たしかめよう。"]},
+ {q:"「未満」は その数を 入れる？",c:["入れる","入れない"],a:1,diag:{type:"terms",pick:2},
+  e:"未満は その数より 小さい。125未満に 125 は 入らない。",
+  steps:["3つの 言葉を ならべて 考える。","<b>未満</b>＝その数は <b>入らない</b>。「350未満」なら 350 は だめ。","349 まで 入る。図で たしかめよう。"]},
+ {q:"和や差の 見積もりで よく使うのは？",c:["百の位までのがい数","上から1けたのがい数","一の位までのがい数","十の位までのがい数"],a:0,
+  diag:{type:"calc",rows:[["587","十の位","8","切り上げ","600"],["412","十の位","1","そのまま","400"]],eq:"600 ＋ 400 ＝ 1000"},
+  e:"たし算・ひき算は 位を そろえたいので 百の位まで。",
+  steps:["たし算・ひき算は <b>位を そろえる</b>と 計算しやすい。","だから 百の位まで（または 十の位まで）の がい数に そろえる。","かけ算・わり算は けた数が ちがうので、また 別の やり方（上から1けた）。"]},
+ {q:"積や商の 見積もりで よく使うのは？",c:["百の位までのがい数","上から1けたのがい数","一の位までのがい数","千の位までのがい数"],a:1,
+  diag:{type:"calc",rows:[["486","上から2けため","8","切り上げ","500"],["307","上から2けため","0","そのまま","300"]],eq:"500 × 300 ＝ 150000"},
+  e:"かけ算・わり算は けた数が ちがうので 上から1けた。",
+  steps:["かけ算・わり算は、2つの 数の けた数が ちがう ことが 多い。","だから <b>上から1けた</b>だけ のこして 計算する。","486×307 → 500×300 ＝ 150000。"]},
+ {q:"1000円で たりるか しらべるとき 使うのは？",c:["四捨五入","切り上げ","切り捨て","そのまま計算"],a:1,diag:{type:"method",pick:1},
+  e:"多めに 見る＝切り上げ。",
+  steps:["聞かれているのは <b>「たりる？」</b>。","多めに 見て たりれば、かならず たりる → <b>切り上げ</b>。","「こえる？」の ときは 切り捨て。セットで おぼえる。"]},
+ {q:"がい数にすると よいのは どんなとき？",c:["正確な数が ひつようなとき","数が 大きくて、だいたいの 大きさが わかれば よいとき","計算が できないとき","答えを 小さく したいとき"],a:1,
+  e:"タイムや 得点など、正確な数が ひつようなものは がい数に しません。",
+  steps:["がい数は <b>「だいたい」で よい とき</b>に 使う。","数の 大きさが つかめれば よい とき → がい数で よい。","タイム・得点・メダルの数は、<b>正確な数</b>でないと 意味が かわるので がい数に しない。"]}
+],"E",true);
+
+/* ===================== ⑤ にている問題 ===================== */
+const TESTS=[
+ {no:"1",ref:"p.120 ／ 約何万人",
+  body:'下の表は、動物園の入園者数を表したものです。それぞれ <b>約何万人</b>と いえますか。'
+   +'<table class="smallt"><tr><th>土曜日</th><th>日曜日</th></tr><tr><td>34812人</td><td>46820人</td></tr></table>',
+  ans:['土曜日 約3万人','日曜日 約5万人'],
+  st:'「約何万人」＝<b>一万の位までのがい数</b>なので、<b>千の位</b>で四捨五入。<br>・34812 → 千の位は <b>4</b> → そのまま → 30000 ＝ 約3万人<br>・46820 → 千の位は <b>6</b> → くり上げ → 50000 ＝ 約5万人'},
+ {no:"2",ref:"p.122 ／ 位までのがい数",
+  body:'四捨五入して、〔　〕の中の位までのがい数にしましょう。<br>① 6847〔千の位〕　② 35208〔一万の位〕　③ 638420〔一万の位〕',
+  ans:['① 7000','② 40000','③ 640000'],
+  st:'「その位まで」は <b>1つ下の位</b>で四捨五入。<br>① 千の位まで → 百の位を見る。百の位は <b>8</b> → くり上げ → <b>7000</b><br>② 一万の位まで → 千の位を見る。千の位は <b>5</b> → くり上げ → <b>40000</b><br>③ 一万の位まで → 千の位を見る。千の位は <b>8</b> → くり上げ → <b>640000</b>'},
+ {no:"3",ref:"p.124 ／ 上から2けた",
+  body:'四捨五入して、<b>上から2けた</b>のがい数にしましょう。<br>① 73641　② 48297',
+  ans:['① 74000','② 48000'],
+  st:'「上から2けた」は <b>上から3けため</b>で四捨五入。<br>① 73641 の上から3けためは <b>6</b> → くり上げ → <b>74000</b><br>② 48297 の上から3けためは <b>2</b> → そのまま → <b>48000</b>'},
+ {no:"4",ref:"p.125 ／ はんい",
+  body:'四捨五入して、<b>百の位まで</b>のがい数にすると <b>400</b> になる整数を 求めます。<br>① いちばん小さい数と いちばん大きい数<br>② 以上・未満を つかって はんいを 表す',
+  ans:['① 350 と 449','② 350以上 450未満'],
+  st:'百の位まで → <b>十の位</b>で四捨五入。<br>・十の位が <b>5〜9</b> なら 400 に くり上がる → 350 から<br>・十の位が <b>0〜4</b> なら 400 のまま → 449 まで<br>・349 は 300、450 は 500 に なってしまう<br>だから いちばん小さい数 <b>350</b>、いちばん大きい数 <b>449</b>、はんいは <b>350以上 450未満</b>。'},
+ {no:"5",ref:"p.127 ／ 和・差の見積もり",
+  body:'四捨五入して<b>百の位まで</b>のがい数にして、答えを見積もりましょう。<br>① 587 ＋ 412　② 823 − 467　③ 1000 − 278 − 361',
+  ans:['① 600＋400＝約1000','② 800−500＝約300','③ 1000−300−400＝約300'],
+  st:'百の位まで → <b>十の位</b>で四捨五入。<br>① 587→<b>600</b>、412→<b>400</b>　600＋400＝<b>1000</b><br>② 823→<b>800</b>、467→<b>500</b>　800−500＝<b>300</b><br>③ 278→<b>300</b>、361→<b>400</b>　1000−300−400＝<b>300</b><br>※ 本物の答えは ①999 ②356 ③361。見積もりは 近い数に なっています。'},
+ {no:"6",ref:"p.128 ／ 積・商の見積もり",
+  body:'四捨五入して<b>上から1けた</b>のがい数にして、答えを見積もりましょう。<br>① 486 × 307　② 63820 ÷ 31',
+  ans:['① 500×300＝約150000','② 60000÷30＝約2000'],
+  st:'上から1けた → <b>上から2けため</b>で四捨五入。<br>① 486→<b>500</b>、307→<b>300</b>　500×300＝<b>150000</b>（本物 149202）<br>② 63820→<b>60000</b>、31→<b>30</b>　60000÷30＝<b>2000</b>（本物 2058あまり22）'},
+ {no:"7",ref:"p.124 ／ あてはまる数さがし",
+  body:'四捨五入して <b>上から1けた</b>のがい数にすると <b>5000</b> になり、<b>上から2けた</b>のがい数にすると <b>5400</b> になる数を 1つ えらびましょう。<br>ア 5482　　イ 5382　　ウ 5347',
+  ans:['イ 5382'],
+  st:'上から1けた → 上から2けため、上から2けた → 上から3けためで 四捨五入。<br>ア 5482 … 上から1けた 5000 ○ ／ 上から2けた <b>5500</b> ✗<br>イ 5382 … 上から1けた <b>5000</b> ○ ／ 上から2けた <b>5400</b> ○<br>ウ 5347 … 上から1けた 5000 ○ ／ 上から2けた <b>5300</b> ✗'},
+ {no:"8",ref:"p.128 ／ 場面の見積もり",
+  body:'水族館の1人分の入館料は <b>480円</b> です。<b>213人</b>分の代金は、約何円かを 見積もります。四捨五入して<b>上から1けた</b>のがい数にして、答えを 見積もりましょう。',
+  ans:['500 × 200 ＝ 100000','約100000円（約10万円）'],
+  st:'上から1けた → 上から2けためで 四捨五入。<br>・480 → 上から2けためが <b>8</b> → くり上げ → <b>500</b><br>・213 → 上から2けためが <b>1</b> → そのまま → <b>200</b><br>500×200＝<b>100000</b>。本物は 480×213＝102240 なので、見積もりは 近い。'},
+ {no:"9",ref:"p.127 ／ 買えるか",
+  body:'1000円で、下の3つの品物が 全部 買えるかを 調べます。<br>いちご <b>378円</b>／バナナ <b>142円</b>／ぶどう <b>356円</b><br>① 見当の式 <b>400＋200＋400＝1000</b> は、どの やり方？<br>② 1000円で 全部 買える？',
+  ans:['① 切り上げて 計算している','② 買える（ぜんぶで 876円）'],
+  st:'378→<b>400</b>、142→<b>200</b>、356→<b>400</b>。どれも <b>大きい方の きりのよい数</b>に している ＝ <b>切り上げ</b>。<br>見当が ちょうど 1000円で、本物は 378＋142＋356＝<b>876円</b>。だから 1000円で <b>買える</b>。<br>※ 「多めに 見ても 1000円に おさまる」＝ かならず 買える、が ポイント。'},
+ {no:"10",ref:"p.124 ／ どんなときに がい数",
+  body:'新聞に 書くときに、<b>がい数で 表すと よいもの</b>に ○を つけましょう。（いくつでも）<br>① 会場に 来た人の数　② マラソンの タイム　③ 大会を 開くのにかかった お金　④ 日本が とった メダルの数　⑤ サッカーの 試合の 得点',
+  ans:['① と ③'],
+  st:'数が 大きくて、<b>「だいたい」で わかりやすい</b>ものが がい数に 向いています → ① 来場者の数、③ かかったお金。<br>② タイム、④ メダルの数、⑤ 得点は、<b>正確な数でないと 意味が かわる</b>ので がい数に しません。'}
+];
+(function(){
+  const host=document.getElementById("testItems");
+  TESTS.forEach((d,i)=>{
+    total++;
+    const el=document.createElement("div"); el.className="titem";
+    el.innerHTML='<div class="th"><span class="no">問'+d.no+'</span><span class="ref">'+d.ref+'</span></div>'
+      +'<div class="body">'+d.body+'</div>'
+      +'<div class="ans">'+d.ans.map(a=>'<span class="pill">'+a+'</span>').join('')+'</div>'
+      +'<details><summary>とき方（じゅんび）を見る</summary><div class="st">'+d.st+'</div></details>';
+    el.querySelector(".body").appendChild(sayBtn(()=>el.querySelector(".body")));
+    const dts=el.querySelector("details");
+    dts.addEventListener("toggle",()=>{ if(dts.open){ done.add("T"+i); upd(); }});
+    host.appendChild(el);
+  });
+})();
+
+/* ===================== ツール ===================== */
+document.getElementById("tRuby").addEventListener("click",e=>{
+  const off=document.body.classList.toggle("noruby");
+  e.currentTarget.setAttribute("aria-pressed",off?"false":"true");
+});
+document.getElementById("tBig").addEventListener("click",e=>{
+  const big=document.documentElement.style.getPropertyValue("--fs")==="20px";
+  document.documentElement.style.setProperty("--fs",big?"17px":"20px");
+  e.currentTarget.setAttribute("aria-pressed",big?"false":"true");
+});
+document.getElementById("tSay").addEventListener("click",e=>{
+  sayOn=!sayOn;
+  e.currentTarget.setAttribute("aria-pressed",sayOn?"true":"false");
+  document.querySelectorAll(".say").forEach(b=>b.style.display=sayOn?"":"none");
+});
+
+/* ===================== 起動 ===================== */
+addRuby(document.querySelector("main"));
+upd();
+
+</script>
+</body>
+</html>
