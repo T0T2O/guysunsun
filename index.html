@@ -116,7 +116,10 @@ select{max-width:100%}
 .saysub{text-align:center;font-size:.82rem;color:var(--ink2);margin:0}
 
 /* number line */
-.nl{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px 4px}
+.nl{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px 4px;overflow-x:auto}
+.nl>svg{min-width:600px}
+.nlbox{overflow-x:auto}
+.nlbox>svg{min-width:600px}
 
 /* quiz */
 .qlist{display:grid;gap:12px}
@@ -609,23 +612,56 @@ function buildQuiz(host,data,prefix,withSay){
   });
 }
 
-/* ===================== 数直線 ===================== */
+/* ===================== 数直線（ラベルは段違い＋引き出し線） ===================== */
+function nlWidth(str){
+  let w=0;
+  for(const ch of String(str)){
+    w += /[\u3000-\u9fff\uff00-\uffef]/.test(ch) ? 13.6 : 8.4;
+  }
+  return w;
+}
 function drawNL(el,o){
-  const W=820,H=132,pad=76;
+  const W=900, pad=80;
   const lo=o.lo, hi=o.hi;
   const x=v=>pad+(v-lo)/(hi-lo)*(W-pad*2);
-  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block">';
+  const ticks=(o.ticks||[]).map(t=>{
+    const lab=(t.label!==undefined?t.label:t.v.toLocaleString());
+    const sub=t.sub||"";
+    return {v:t.v, x:x(t.v), lab:lab, sub:sub,
+            w:Math.max(nlWidth(lab), nlWidth(sub), 26)};
+  }).sort((a,b)=>a.x-b.x);
+  const hasSub=ticks.some(t=>t.sub);
+  const rowH = hasSub ? 47 : 27;
+  const rowRight=[];
+  ticks.forEach(t=>{
+    let r=0;
+    while(rowRight[r]!==undefined && (t.x - t.w/2) < rowRight[r] + 12) r++;
+    t.row=r;
+    rowRight[r]=t.x + t.w/2;
+  });
+  const maxRow=ticks.reduce((m,t)=>Math.max(m,t.row),0);
+  const baseY=97;
+  const H=baseY+maxRow*rowH+(hasSub?20:0)+24;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block" role="img">';
   if(o.shade){
-    s+='<rect x="'+x(o.shade.from)+'" y="52" width="'+(x(o.shade.to)-x(o.shade.from))+'" height="32" fill="rgba(47,109,181,.15)" stroke="#2f6db5" stroke-width="1.3" stroke-dasharray="6 4" rx="3"/>';
+    s+='<rect x="'+x(o.shade.from)+'" y="52" width="'+Math.max(2,x(o.shade.to)-x(o.shade.from))+'" height="32" fill="rgba(47,109,181,.14)" stroke="#2f6db5" stroke-width="1.4" stroke-dasharray="7 5" rx="4"/>';
   }
   s+='<line x1="'+x(lo)+'" y1="68" x2="'+x(hi)+'" y2="68" stroke="#20293a" stroke-width="2.6"/>';
-  (o.ticks||[]).forEach(t=>{
-    s+='<line x1="'+x(t.v)+'" y1="60" x2="'+x(t.v)+'" y2="76" stroke="#20293a" stroke-width="2"/>';
-    s+='<text x="'+x(t.v)+'" y="98" text-anchor="middle" font-size="15" font-weight="700" fill="#20293a" font-family="BIZ UDPGothic">'+(t.label!==undefined?t.label:t.v.toLocaleString())+'</text>';
+  ticks.forEach(t=>{
+    s+='<line x1="'+t.x+'" y1="58" x2="'+t.x+'" y2="78" stroke="#20293a" stroke-width="2"/>';
+    const ty=baseY+t.row*rowH;
+    if(t.row>0){
+      s+='<line x1="'+t.x+'" y1="78" x2="'+t.x+'" y2="'+(ty-15)+'" stroke="#8b93a1" stroke-width="1" stroke-dasharray="3 3"/>';
+    }
+    const anchor = t.x < pad+20 ? "start" : (t.x > W-pad-20 ? "end" : "middle");
+    s+='<text x="'+t.x+'" y="'+ty+'" text-anchor="'+anchor+'" font-size="15" font-weight="700" fill="#20293a" font-family="BIZ UDPGothic">'+t.lab+'</text>';
+    if(t.sub){
+      s+='<text x="'+t.x+'" y="'+(ty+17)+'" text-anchor="'+anchor+'" font-size="12.5" font-weight="700" fill="#5a6779" font-family="BIZ UDPGothic">'+t.sub+'</text>';
+    }
   });
   if(o.marker!==undefined && o.marker!==null){
     s+='<circle cx="'+x(o.marker)+'" cy="68" r="9" fill="#cf4a3c"/>';
-    s+='<text x="'+x(o.marker)+'" y="42" text-anchor="middle" font-size="18" font-weight="900" fill="#cf4a3c" font-family="Zen Maru Gothic">'+o.marker.toLocaleString()+'</text>';
+    s+='<text x="'+x(o.marker)+'" y="40" text-anchor="middle" font-size="18" font-weight="900" fill="#cf4a3c" font-family="Zen Maru Gothic">'+o.marker.toLocaleString()+'</text>';
   }
   s+='</svg>';
   el.innerHTML=s;
@@ -648,7 +684,7 @@ const nlRange=document.getElementById("nlRange"), nlBox=document.getElementById(
 function updNL(){
   const v=+nlRange.value;
   nlVal.textContent=v.toLocaleString();
-  drawNL(nlBox,{lo:20000,hi:30000,marker:v,ticks:[{v:20000},{v:25000,label:"25000（まん中）"},{v:30000}]});
+  drawNL(nlBox,{lo:20000,hi:30000,marker:v,ticks:[{v:20000,label:"20000"},{v:25000,label:"25000",sub:"まん中"},{v:30000,label:"30000"}]});
   const near = v<25000 ? 20000 : 30000;
   nlSay.innerHTML='いちばん 近いのは <span class="n">'+near.toLocaleString()+'</span>　→　がい数は <em>'+near.toLocaleString()+'</em>';
   nlSub.textContent = v===25000 ? "ちょうど まん中。こういうときは 大きい方（30000）に そろえます。" :
@@ -721,10 +757,10 @@ function runRange(){
   const N=parseInt(rgNum.value,10)||0, p=+rgPlace.value;
   if(N<1){ rgBox.innerHTML=""; rgSay.textContent="1より 大きい数を 入れてね"; rgSub.textContent=""; return; }
   const half=p/2, mn=N-half, mx=N+half;
-  drawNL(rgBox,{lo:mn-p*0.4,hi:mx+p*0.4,shade:{from:mn,to:mx},ticks:[
-    {v:mn,label:mn.toLocaleString()},
-    {v:N,label:N.toLocaleString()},
-    {v:mx,label:mx.toLocaleString()}
+  drawNL(rgBox,{lo:mn-p*0.35,hi:mx+p*0.35,shade:{from:mn,to:mx},ticks:[
+    {v:mn,label:mn.toLocaleString(),sub:"以上（入る）"},
+    {v:N,label:N.toLocaleString(),sub:"がい数"},
+    {v:mx,label:mx.toLocaleString(),sub:"未満（入らない）"}
   ]});
   const Pl={10:"十の位",100:"百の位",1000:"千の位",10000:"一万の位"}[p];
   rgSay.innerHTML='<span class="n">'+mn.toLocaleString()+'</span> 以上 <span class="n">'+mx.toLocaleString()+'</span> 未満';
@@ -766,17 +802,17 @@ buildQuiz(document.getElementById("quizA"),[
 buildQuiz(document.getElementById("quizB"),[
  {q:"「125kg未満」に 入るのは どれ？",
   c:["125kg","125.1kg","124.9kg","126kg"],a:2,
-  diag:{type:"nl",lo:123,hi:127,marker:124.9,shade:{from:123,to:125},ticks:[{v:125,label:"125kg"},{v:124.9,label:"124.9kg"}]},
+  diag:{type:"nl",lo:122.5,hi:127.5,marker:124.9,shade:{from:122.5,to:125},ticks:[{v:125,label:"125kg",sub:"ここは入らない"},{v:124.9,label:"124.9kg",sub:"ここは入る"}]},
   e:"未満は「その数より 小さい」。124.9 は 125 より 小さいので 入る。125 は 入らない。",
   steps:["<b>未満</b>＝「その数は 入らない」。まず その数を 消す。","入るのは <b>125 より 小さい数</b>だけ（図の 青い所）。","124.9 は 125 より 小さい → <b>入る</b>。126・125.1 は 大きいので 入らない。"]},
  {q:"百の位までのがい数にすると 400 になる整数で、いちばん 大きい数は？",
   c:["399","400","449","450"],a:2,
-  diag:{type:"nl",lo:300,hi:500,shade:{from:350,to:450},ticks:[{v:350,label:"350（下はし）"},{v:400},{v:449,label:"449（上はし）"},{v:450,label:"450→500"}]},
+  diag:{type:"nl",lo:320,hi:480,shade:{from:350,to:450},ticks:[{v:350,label:"350",sub:"いちばん小さい"},{v:400,label:"400"},{v:449,label:"449",sub:"いちばん大きい"},{v:450,label:"450",sub:"500になる"}]},
   e:"十の位が 0〜4 なら 400。449 まで。450 は 十の位が 5 なので 500 に なります。",
   steps:["百の位まで → <b>十の位</b>で 四捨五入。","十の位が <b>0〜4</b> なら 400 のまま。","十の位が 4 で いちばん大きいのは <b>449</b>。450 は 十の位が 5 なので <b>500</b> に なってしまう。"]},
  {q:"十の位までのがい数にすると 150 になる整数で、いちばん 小さい数は？",
   c:["140","145","149","150"],a:1,
-  diag:{type:"nl",lo:140,hi:160,shade:{from:145,to:155},ticks:[{v:145,label:"145（下はし）"},{v:150},{v:155,label:"155（上はし）"}]},
+  diag:{type:"nl",lo:140,hi:160,shade:{from:145,to:155},ticks:[{v:140,label:"140"},{v:145,label:"145",sub:"いちばん小さい"},{v:150,label:"150"},{v:155,label:"155",sub:"ここまで"}]},
   e:"一の位が 5〜9 なら くり上げて 150。いちばん小さいのは 145。144 は 140 に なります。",
   steps:["十の位まで → <b>一の位</b>で 四捨五入。","一の位が <b>5〜9</b> なら くり上がって 150。","一の位が 5 で いちばん小さいのは <b>145</b>。144 は 一の位が 4 なので <b>140</b> に なってしまう。"]},
  {q:"「以上」の 意味は？",
